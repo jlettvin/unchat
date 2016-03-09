@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US"><!-- N and S Suffixes mean {N:North, S:South} -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="keywords" content="split window" />
+  <meta name="description" content="split window unit test" />
+  <title>SPLIT WINDOW UNIT TEST</title>
+  <script src="splitwindow.js"></script>
+  <script src="wiki.js"></script>
+  <script type="text/javascript">
+function markif(condition, text) {
+  if (condition) return window.markdown(text); //, window.markdownPatterns);
+  else return '<pre>' + text + '</pre>';
+}
+var data = {markup:true};  // Toggle source(false) or markdown(true) display.
+data.userN = 'North';
+data.bodyN = markif(data.markup, splitwindow.hereDoc(function() {/*
+== Shakespeare sonnet CXVI: ==
+ Let me not to the marriage of true minds
+ Admit impediments. Love is not love
+ Which alters when it alteration finds,
+ Or bends with the remover to remove:
+ O, no! it is an ever-fixed mark,
+ That looks on tempests and is never shaken;
+ It is the star to every wandering bark,
+ Whose worth's unknown, although his height be taken.
+ Love's not Time's fool, though rosy lips and cheeks
+ Within his bending sickle's compass come;
+ Love alters not with his brief hours and weeks,
+ But bears it out even to the edge of doom.
+   If this be error and upon me proved,
+   I never writ, nor no man ever loved.
+@- wiki markdown color fails.
+Once upon a midnight dreary, while I pondered weak and weary over many a quaint and curious volume of forgotten lore.
+*/}));
+data.userS = 'South';
+data.bodyS = markif(data.markup, splitwindow.hereDoc(function() {/*
+== Shakespeare sonnet CX: ==
+ Alas! 'tis true, I have gone here and there,
+ And made my self a motley to the view,
+ Gored mine own thoughts, sold cheap what is most dear,
+ Made old offences of affections new;
+ Most true it is, that I have looked on truth
+ Askance and strangely; but, by all above,
+ These blenches gave my heart another youth,
+ And worse essays proved thee my best of love.
+ Now all is done, have what shall have no end:
+ Mine appetite I never more will grind
+ On newer proof, to try an older friend,
+ A god in love, to whom I am confined.
+   Then give me welcome, next my heaven the best,
+   Even to thy pure and most most loving breast.
+@+ wiki markdown is working with some bugs.
+*/}));
+splitwindow.init(data);
+  </script>
+</head>
+<body onLoad="splitwindow.resize()" id="splitwindow"></body>
+</html>
