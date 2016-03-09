@@ -7,16 +7,15 @@
   <title>SPLIT WINDOW UNIT TEST</title>
   <script src="splitwindow.js"></script>
   <script src="wiki.js"></script>
+  <script src="keymap.js"></script>
   <script type="text/javascript">
 function markif(condition, text) {
   if (condition) return window.markdown(text); //, window.markdownPatterns);
   else return '<pre>' + text + '</pre>';
 }
-var data = {markup:true};  // Toggle source(false) or markdown(true) display.
-function source(e) { data.markup = false; splitwindow.resize(); }
-function target(e) { data.markup =  true; splitwindow.resize(); }
+var data = {markupN:true,markupS:true};
 data.userN = 'North';
-data.bodyN = markif(data.markup, splitwindow.hereDoc(function() {/*
+var bodyN = splitwindow.hereDoc(function() {/*
 == Shakespeare sonnet CXVI: ==
  Let me not to the marriage of true minds
  Admit impediments. Love is not love
@@ -34,9 +33,9 @@ data.bodyN = markif(data.markup, splitwindow.hereDoc(function() {/*
    I never writ, nor no man ever loved.
 @- wiki markdown color fails.
 Once upon a midnight dreary, while I pondered weak and weary over many a quaint and curious volume of forgotten lore.
-*/}));
+*/});
 data.userS = 'South';
-data.bodyS = markif(data.markup, splitwindow.hereDoc(function() {/*
+var bodyS = splitwindow.hereDoc(function() {/*
 == Shakespeare sonnet CX: ==
  Alas! 'tis true, I have gone here and there,
  And made my self a motley to the view,
@@ -53,15 +52,37 @@ data.bodyS = markif(data.markup, splitwindow.hereDoc(function() {/*
    Then give me welcome, next my heaven the best,
    Even to thy pure and most most loving breast.
 @+ wiki markdown is working with some bugs.
-*/}));
+*/});
+function toggle() {
+  console.log('toggle: ' + data.markupN + '/' + data.markupS)
+  data.bodyN = markif(data.markupN, bodyN);
+  data.bodyS = markif(data.markupS, bodyS);
+}
+var keyAction = {
+  Shift:false,
+  Down: function(e) {
+    var name = keyMap[e.keyCode];
+    if (name == "SHIFT") Shift =  true;
+    if (Shift) {
+      if      (name == "DOWN") { data.markupS = !data.markupS; toggle() }
+      else if (name ==   "UP") { data.markupN = !data.markupN; toggle() }
+    }
+    splitwindow.resize();
+  },
+  Up: function(e) {
+    var name = keyMap[e.keyCode];
+    if (name == "SHIFT") Shift =  false;
+  },
+};
 splitwindow.init(data);
+toggle();
   </script>
 </head>
 
 <body
-  onLoad="splitwindow.resize()"
-  onkeydown="source(event)"
-  onkeyup="target(event)"
+  onLoad   ="splitwindow.resize()"
+  onkeydown="keyAction.Down(event)"
+  onkeyup  ="keyAction.Up  (event)"
   id="splitwindow">
 </body>
 </html>
