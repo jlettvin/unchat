@@ -43,8 +43,8 @@ splitwindow = {
   // prepare divs for North and South pane components.
   userN   = '<header id="userN" align="center">'  + this.data.userN + '</header>';
   userS   = '<header id="userS" align="center">'  + this.data.userS + '</header>';
-  paneN   = '<div id="paneN">' + userN + this.data.bodyN + '</div>';
-  paneS   = '<div id="paneS">' + userS + this.data.bodyS + '</div>';
+  paneN   = '<article id="paneN">' + userN + this.data.bodyN + '</article>';
+  paneS   = '<article id="paneS">' + userS + this.data.bodyS + '</article>';
 
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
