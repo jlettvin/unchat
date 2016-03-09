@@ -9,7 +9,7 @@
   <script src="wiki.js"></script>
   <script src="keymap.js"></script>
   <script type="text/javascript">
-function markif(condition, text) {
+function markupIf(condition, text) {
   if (condition) return window.markdown(text); //, window.markdownPatterns);
   else return '<pre>' + text + '</pre>';
 }
@@ -55,23 +55,30 @@ var bodyS = splitwindow.hereDoc(function() {/*
 */});
 function toggle() {
   console.log('toggle: ' + data.markupN + '/' + data.markupS)
-  data.bodyN = markif(data.markupN, bodyN);
-  data.bodyS = markif(data.markupS, bodyS);
+  data.bodyN = markupIf(data.markupN, bodyN);
+  data.bodyS = markupIf(data.markupS, bodyS);
 }
-var keyAction = {
+var keyState = {
   Shift:false,
   Down: function(e) {
     var name = keyMap[e.keyCode];
-    if (name == "SHIFT") Shift =  true;
-    if (Shift) {
+    if (name == "SHIFT") keyState.Shift =  true;
+    else if (keyState.Shift == true) {
       if      (name == "DOWN") { data.markupS = !data.markupS; toggle() }
       else if (name ==   "UP") { data.markupN = !data.markupN; toggle() }
+    }
+    else if (name == "F1") {
+      alert(splitwindow.hereDoc(function() {/*
+Use:
+<Shift><Up>   to toggle North wiki/view
+<Shift><Down> to toggle South wiki/view
+*/}));
     }
     splitwindow.resize();
   },
   Up: function(e) {
     var name = keyMap[e.keyCode];
-    if (name == "SHIFT") Shift =  false;
+    if (name == "SHIFT") keyState.Shift =  false;
   },
 };
 splitwindow.init(data);
@@ -81,8 +88,8 @@ toggle();
 
 <body
   onLoad   ="splitwindow.resize()"
-  onkeydown="keyAction.Down(event)"
-  onkeyup  ="keyAction.Up  (event)"
+  onkeydown="keyState.Down(event)"
+  onkeyup  ="keyState.Up  (event)"
   id="splitwindow">
 </body>
 </html>
