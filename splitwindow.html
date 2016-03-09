@@ -13,8 +13,8 @@ function markif(condition, text) {
   else return '<pre>' + text + '</pre>';
 }
 var data = {markup:true};  // Toggle source(false) or markdown(true) display.
-function source(e) { data.markup = false; }
-function target(e) { data.markup =  true; }
+function source(e) { data.markup = false; splitwindow.resize(); }
+function target(e) { data.markup =  true; splitwindow.resize(); }
 data.userN = 'North';
 data.bodyN = markif(data.markup, splitwindow.hereDoc(function() {/*
 == Shakespeare sonnet CXVI: ==
