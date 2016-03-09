@@ -22,6 +22,8 @@ splitwindow = {
   style += 'body { background-color:red; overflow:hidden; }';
   style += 'article { overflow-y: scroll; }';
   style += 'pre  { margin:0; }';
+  style += 'a.link { background-color: white; }';
+  style += 'table { color: white; }';
   style += '#userN { position:absolute; right:0; color:#FF0; }';
   style += '#userS { position:absolute; right:0; color:#770; }';
   // prepare style for North frame.

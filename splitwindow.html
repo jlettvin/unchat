@@ -32,7 +32,6 @@ var bodyN = splitwindow.hereDoc(function() {/*
    If this be error and upon me proved,
    I never writ, nor no man ever loved.
 @- wiki markdown color fails.
-Once upon a midnight dreary, while I pondered weak and weary over many a quaint and curious volume of forgotten lore.
 */});
 data.userS = 'South';
 var bodyS = splitwindow.hereDoc(function() {/*
@@ -51,7 +50,58 @@ var bodyS = splitwindow.hereDoc(function() {/*
  A god in love, to whom I am confined.
    Then give me welcome, next my heaven the best,
    Even to thy pure and most most loving breast.
+
+== Checkbox items ==
 @+ wiki markdown is working with some bugs.
+
+== First lines of Edgar Allen Poe's "The Raven" ==
+Once upon a midnight dreary,
+while I pondered weak and weary
+over many a quaint and curious
+volume of forgotten lore.
+
+== URLs ==
+![rote.training/rote/integrals.php
+integrals]!
+
+== Lists ==
+* bullet item 1
+* bullet item 2
+# numbered item 1
+# numbered item 2
+
+=== CHECK LISTS ===
+@  Check unmarked
+@+ Check accepted
+@- Check rejected
+@0 Check numbered
+@9 Check numbered
+@a Check lettered
+@z Check lettered
+@A Check Lettered
+@Z Check Lettered
+
+=== FONT EFFECTS ===
+!=Bold=!,^^
+!/italic/!,^^
+!_underline_!,^^
+!-strike-!.
+
+=== INDENT, LINE BREAK: ===
+___Indent paragraph 1,
+let it wrap, and then
+break for next paragraph.
+
+___Indent paragraph 2,
+let it wrap, and then
+break for next paragraph.
+
+Break^^
+a^^
+line^^
+into^^
+words.^^^
+
 */});
 function toggle() {
   console.log('toggle: ' + data.markupN + '/' + data.markupS)

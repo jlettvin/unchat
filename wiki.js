@@ -137,11 +137,11 @@ var wiki = (function() {
         var c = line.substr(1,1);
         var d;
         if(     c >= '0' && c <= '9') d = c; //$digit[$c];
-        else if(c=='+') d = '<b style="color:#00AA00;">&#x2714;</b>';
-        else if(c=='-') d = '<b style="color:red;">&#x2718;</b>';
+        else if(c=='+') d = '<b style="background-color:white; color:#00AA00;">&#x2714;</b>';
+        else if(c=='-') d = '<b style="background-color:white; color:red;">&#x2718;</b>';
         else            d = c; //""; //"&#x20de;";
         var s = line.substr(2).trim();
-        return "<tr><td>"+d+"</td><td>"+s+"</td></tr>";
+        return '<tr><td>'+d+'</td><td style="background-color:white">'+s+'</td></tr>';
   }
 
   //___________________________________________________________________________
@@ -379,14 +379,12 @@ var wiki = (function() {
         var suite = {
           "line\\\nwrap": 'line wrap',
           "@  Check unmarked\n@+ Check accepted\n@- Check rejected":
-            '<table style="border:1px solid red;color:black;">\n' +
-            '\n' +
-            '<tr><td> </td><td>Check unmarked</td></tr>\n' +
-            '<tr><td><b style="color:#00AA00;">&#x2714;</b></td>' +
-            '<td>Check accepted</td></tr>\n' +
-            '<tr><td><b style="color:red;">&#x2718;</b></td>' +
-            '<td>Check rejected</td></tr>\n' +
-            '</table>\n',
+'<table style="border:1px solid red;color:black;">\n' +
+'\n' +
+'<tr><td> </td><td style="background-color:white">Check unmarked</td></tr>\n' +
+'<tr><td><b style="background-color:white; color:#00AA00;">&#x2714;</b></td><td style="background-color:white">Check accepted</td></tr>\n' +
+'<tr><td><b style="background-color:white; color:red;">&#x2718;</b></td><td style="background-color:white">Check rejected</td></tr>\n' +
+'</table>\n',
           "# hello world": '<ol>\n' +
             '\n' +
             '<li>hello world</li>\n' +
