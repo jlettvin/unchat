@@ -34,7 +34,7 @@ splitwindow = {
   // declare local variables.
   var style, userN, userS, paneN, paneS;
   var w  = window.innerWidth, h = window.innerHeight;
-  this.getScroll();
+  //this.getScroll();
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
 
@@ -73,7 +73,7 @@ splitwindow = {
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
   window.onresize = splitwindow.resize;
-  window.scrollTo(this.xy.x, this.xy.y);
+  //window.scrollTo(this.xy.x, this.xy.y);
  },
 
 };
