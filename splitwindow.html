@@ -32,6 +32,8 @@ var bodyN = splitwindow.hereDoc(function() {/*
    If this be error and upon me proved,
    I never writ, nor no man ever loved.
 @- wiki markdown color fails.
+@- wiki paragraph break on multiple newlines fails.
+@- wiki userS final comment closing is visible.
 */});
 data.userS = 'South';
 var bodyS = splitwindow.hereDoc(function() {/*
@@ -94,14 +96,9 @@ break for next paragraph.
 
 ___Indent paragraph 2,
 let it wrap, and then
-break for next paragraph.
+break for next paragraph.^^^
 
-Break^^
-a^^
-line^^
-into^^
-words.^^^
-
+Break^^a^^line^^into^^words.
 */});
 function toggle() {
   console.log('toggle: ' + data.markupN + '/' + data.markupS)
