@@ -20,9 +20,10 @@ splitwindow = {
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';
   style += 'body { background-color:red; overflow:hidden; }';
-  style += 'header { align:center; }';
   style += 'article { overflow-y: scroll; }';
   style += 'pre  { margin:0; }';
+  style += '#userN { align:center; color:#CCC; }';
+  style += '#userS { align:center; color:#333; }';
   // prepare style for North frame.
   style += '#paneN{';
   style +=    'position:' +        'absolute; ' +            'color:white; ';
@@ -41,10 +42,10 @@ splitwindow = {
   style  = '<style type="text/css">'+ style +'</style>';
 
   // prepare divs for North and South pane components.
-  paneN  = '<header  id="userN">' + this.data.userN + '</header>';
-  paneS  = '<header  id="userS">' + this.data.userS + '</header>';
-  paneN += '<article id="paneN">' + this.data.bodyN + '</article>';
-  paneS += '<article id="paneS">' + this.data.bodyS + '</article>';
+  userN  = '<header  id="userN">' + this.data.userN + '</header>';
+  userS  = '<header  id="userS">' + this.data.userS + '</header>';
+  paneN += '<article id="paneN">' + userN + this.data.bodyN + '</article>';
+  paneS += '<article id="paneS">' + userS + this.data.bodyS + '</article>';
 
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
@@ -52,3 +53,9 @@ splitwindow = {
  },
 
 };
+// Make markdown function visible.
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+  module.exports = splitwindow;
+else {
+  window.splitwindow = splitwindow;
+}

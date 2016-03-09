@@ -259,3 +259,8 @@ var keyMap = [
     /* [254] */ "WIN_OEM_CLEAR",
     /* [255] */ ""
 ];
+// Make keyMap visible.
+//if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+  //module.exports = keyMap;
+//else {
+  //window.keyMap = keyMap;
