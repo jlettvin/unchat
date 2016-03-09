@@ -45,8 +45,8 @@ splitwindow = {
   style += 'pre  { margin:0; }';
   style += 'a.link { background-color: white; }';
   style += 'table { color: white; }';
-  style += '#userN { position:absolute; right:0; color:#FF0; }';
-  style += '#userS { position:absolute; right:0; color:#770; }';
+  style += '#userN { position:fixed; right:20px; color:#FF0; }';
+  style += '#userS { position:fixed; right:20px; color:#770; }';
   // prepare style for North frame.
   style += '#paneN{';
   style +=    'position:' +        'absolute; ' +            'color:white; ';
