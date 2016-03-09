@@ -9,11 +9,32 @@ splitwindow = {
  // enable client to populate data dictionary.
  init:function(data) { this.data = data; },
 
+ xy: {x:0,y:0},
+ getScroll:function() {
+  // http://webcodingeasy.com/Javascript/Get-scroll-position-of-webpage--crossbrowser
+  var from = false;
+  if (typeof( window.pageYOffset ) == 'number')
+  { //Netscape compliant
+    this.xy = {x:window.pageXOffset, y: window.pageYOffset};
+  } else if (document.body &&
+    (document.body.scrollLeft || document.body.scrollTop))
+  { //DOM compliant
+    from = document.body;
+  } else if (document.documentElement && 
+    (document.documentElement.scrollLeft || document.documentElement.scrollTop))
+  { //IE6 standards compliant mode
+    from = document.documentElement;
+  }
+  if (from) this.xy = {x:from.scrollLeft, y:from.scrollTop};
+  //console.log(this.xy);
+ },
+
  // define function to execute when load/resize operations are called.
  resize:function() {
   // declare local variables.
   var style, userN, userS, paneN, paneS;
   var w  = window.innerWidth, h = window.innerHeight;
+  this.getScroll();
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
 
@@ -52,6 +73,7 @@ splitwindow = {
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
   window.onresize = splitwindow.resize;
+  window.scrollTo(this.xy.x, this.xy.y);
  },
 
 };
