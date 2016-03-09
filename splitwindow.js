@@ -20,8 +20,8 @@ splitwindow = {
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';
   style += 'body { background-color:red; overflow:hidden; }';
-  style += 'div  { margin:0px,0px,0px,0px; padding:0px,0px,0px,0px; }';
-  style += 'div  { overflow-y:scroll; border-collapse:collapse; width:100%; }';
+  //style += 'div  { margin:0px,0px,0px,0px; padding:0px,0px,0px,0px; }';
+  //style += 'div  { overflow-y:scroll; border-collapse:collapse; width:100%; }';
   style += 'pre  { margin:0; }';
   // prepare style for North frame.
   style += '#paneN{';
