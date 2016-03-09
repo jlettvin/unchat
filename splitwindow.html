@@ -13,6 +13,8 @@ function markif(condition, text) {
   else return '<pre>' + text + '</pre>';
 }
 var data = {markup:true};  // Toggle source(false) or markdown(true) display.
+function source(e) { data.markup = false; }
+function target(e) { data.markup =  true; }
 data.userN = 'North';
 data.bodyN = markif(data.markup, splitwindow.hereDoc(function() {/*
 == Shakespeare sonnet CXVI: ==
@@ -55,5 +57,11 @@ data.bodyS = markif(data.markup, splitwindow.hereDoc(function() {/*
 splitwindow.init(data);
   </script>
 </head>
-<body onLoad="splitwindow.resize()" id="splitwindow"></body>
+
+<body
+  onLoad="splitwindow.resize()"
+  onkeydown="source(event)"
+  onkeyup="target(event)"
+  id="splitwindow">
+</body>
 </html>
