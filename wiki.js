@@ -156,10 +156,11 @@ var wiki = (function() {
         var debug = typeof found !== 'undefined' || found == false;
         var found = debug ? found : false;
         var target = [];
-        var pre = false;
+        var box = false;
         var bul = false;
-        var num = false;
         var chk = false;
+        var num = false;
+        var pre = false;
         var tbl = '<table style="border:1px solid red;color:black;">';
         var buffer = source.split("\n");
         var have = new Set();
@@ -167,29 +168,41 @@ var wiki = (function() {
             line = buffer[no];
             if(line.match(/^ /)) {
                 have.add('preformatted');
+                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( num ) { target.push(   '</ol>\n'); num = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if (!pre ) { target.push(   '<pre>'  ); pre =  true; }
             } else if(line.match(/^\*/)) {
                 have.add('bulleted');
+                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( num ) { target.push(   '</ol>\n'); num = false; }
                 if ( pre ) { target.push(   '<pre>\n'); pre = false; }
                 if (!bul ) { target.push(    '<ul>\n'); bul =  true; }
             } else if(line.match(/^\#/)) {
                 have.add('numbered');
+                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( pre ) { target.push(   '<pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if (!num ) { target.push(    '<ol>\n'); num =  true; }
             } else if(line.match(/^\@/)) {
                 have.add('checklist');
+                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( pre ) { target.push(  '</pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if ( num ) { target.push(   '/<ol>\n'); num = false; }
                 if (!chk ) { target.push(    tbl+'\n'); chk =  true; }
+            } else if(line.match(/^\|/)) {
+                have.add('box');
+                if ( pre ) { target.push(  '</pre>\n'); pre = false; }
+                if ( bul ) { target.push(   '</ul>\n'); bul = false; }
+                if ( num ) { target.push(   '/<ol>\n'); num = false; }
+                if ( chk ) { target.push('</table>\n'); chk = false; }
+                if (!box ) { target.push(    tbl+'\n'); box = false; }
             } else {
+                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( pre ) { target.push(  '</pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
@@ -202,6 +215,7 @@ var wiki = (function() {
             if     ( pre ) target.push(trim1);
             else if( num ) target.push(tag('li', trim1));
             else if( bul ) target.push(tag('li', trim1));
+            else if( box ) target.push(trim1);
             else if( chk ) target.push(checkBoxes(line));
             else          target.push(line.trim());
         }
@@ -210,6 +224,7 @@ var wiki = (function() {
         if (bul) { target.push(   '</ul>\n'); bul = false; }
         if (num) { target.push(   '</ol>\n'); num = false; }
         if (chk) { target.push('</table>\n'); chk = false; }
+        if (box) { target.push('</table>\n'); box = false; }
         if (found) {
             found.push.apply(found, Array.from(have));
         }
