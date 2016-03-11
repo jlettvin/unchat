@@ -1,7 +1,8 @@
 splitwindow = {
 
  // Special function to enable multi-line text constants to be defined.
- hereDoc:function(f){return f.toString().replace(/.*\/\*([^\*]*).\/.*/,'$1');},
+ // https://gist.github.com/tai2/c63f973dd7f8b3607c0e
+ HERE:function(f) { return f.toString().split('\n').slice(1,-1).join('\n'); },
 
  // create default empty data dictionary.
  data:{userN:'', bodyN:'', userS:'', bodyS:''},

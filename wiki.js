@@ -3,7 +3,9 @@
 //var EXPORTED_SYMBOLS = ["wiki"];
 
 var wiki = (function() {
+
   var basic_patterns = {
+    // 0: is used to hold titles for fields in remaining entries.
     0 : ['name', 'regexp', 'replacement', 'test', 'expect'],
     // More than one empty lines become paragraph separators
     1 : ['paragraphs',
@@ -156,11 +158,10 @@ var wiki = (function() {
         var debug = typeof found !== 'undefined' || found == false;
         var found = debug ? found : false;
         var target = [];
-        var box = false;
-        var bul = false;
-        var chk = false;
-        var num = false;
         var pre = false;
+        var bul = false;
+        var num = false;
+        var chk = false;
         var tbl = '<table style="border:1px solid red;color:black;">';
         var buffer = source.split("\n");
         var have = new Set();
@@ -168,41 +169,29 @@ var wiki = (function() {
             line = buffer[no];
             if(line.match(/^ /)) {
                 have.add('preformatted');
-                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( num ) { target.push(   '</ol>\n'); num = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if (!pre ) { target.push(   '<pre>'  ); pre =  true; }
             } else if(line.match(/^\*/)) {
                 have.add('bulleted');
-                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( num ) { target.push(   '</ol>\n'); num = false; }
                 if ( pre ) { target.push(   '<pre>\n'); pre = false; }
                 if (!bul ) { target.push(    '<ul>\n'); bul =  true; }
             } else if(line.match(/^\#/)) {
                 have.add('numbered');
-                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( pre ) { target.push(   '<pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if (!num ) { target.push(    '<ol>\n'); num =  true; }
             } else if(line.match(/^\@/)) {
                 have.add('checklist');
-                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( pre ) { target.push(  '</pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
                 if ( num ) { target.push(   '/<ol>\n'); num = false; }
                 if (!chk ) { target.push(    tbl+'\n'); chk =  true; }
-            } else if(line.match(/^\|/)) {
-                have.add('box');
-                if ( pre ) { target.push(  '</pre>\n'); pre = false; }
-                if ( bul ) { target.push(   '</ul>\n'); bul = false; }
-                if ( num ) { target.push(   '/<ol>\n'); num = false; }
-                if ( chk ) { target.push('</table>\n'); chk = false; }
-                if (!box ) { target.push(    tbl+'\n'); box = false; }
             } else {
-                if ( box ) { target.push('</table>\n'); box = false; }
                 if ( chk ) { target.push('</table>\n'); chk = false; }
                 if ( pre ) { target.push(  '</pre>\n'); pre = false; }
                 if ( bul ) { target.push(   '</ul>\n'); bul = false; }
@@ -215,7 +204,6 @@ var wiki = (function() {
             if     ( pre ) target.push(trim1);
             else if( num ) target.push(tag('li', trim1));
             else if( bul ) target.push(tag('li', trim1));
-            else if( box ) target.push(trim1);
             else if( chk ) target.push(checkBoxes(line));
             else          target.push(line.trim());
         }
@@ -224,7 +212,6 @@ var wiki = (function() {
         if (bul) { target.push(   '</ul>\n'); bul = false; }
         if (num) { target.push(   '</ol>\n'); num = false; }
         if (chk) { target.push('</table>\n'); chk = false; }
-        if (box) { target.push('</table>\n'); box = false; }
         if (found) {
             found.push.apply(found, Array.from(have));
         }
@@ -232,13 +219,42 @@ var wiki = (function() {
   }
   
   //___________________________________________________________________________
-  function interpret_reference(arg) {
+  //TODO Imitate this PHP snippet from Desktop/server/nvie/index.php
+  // except use '&' in place of '@'
+  /*
+@book{CajalHistology,
+  author        = {Santiago Ram\'{o}n y Cajal},
+  title         = {Histology of the Nervous System of Man and Vertebrates},
+  publisher     = {Oxford},
+  pages         = {145},
+  isbn          = {ISBN 0-19-507401-7},
+  year          = {1995},
+  note          = {English translation by Swanson and Swanson, original completed in 1904}
+}
+   */
+
+  /*
+        // reference content
+        $source = preg_replace_callback(
+            '|\n@(\S+)\s*\{(\S+)\s*,\s*(.*)\s*\n\}|msU',
+            array($reference, 'body'),
+            $source);
+
+        // reference pointer
+        $source = preg_replace_callback(
+            '|@(\w+)(\W)|msU',
+            array($reference, 'cite'),
+            $source);
+   */
+  /*
+  function reference(arg) {
     return
         '<hr />' +
         'type '      + arg[1].toString() + '<br />' +
         'name '      + arg[2].toString() + '<br />' +
         'body<br />' + arg[3].toString() + '<br />';
   }
+   */
 
   //___________________________________________________________________________
   function Citation() {
@@ -290,10 +306,16 @@ var wiki = (function() {
   }
   var citation = new Citation();
 
+  var entities = {};
+
   //___________________________________________________________________________
   function markdown(source, found) {
     var debug = typeof found !== 'undefined' || found == false;
     var found = debug ? found : false;
+    /*
+        $pattern = '|<!ENTITY\s*(\S*)\s*"([^"]*)">|sU';
+        preg_match_all($pattern, $text, $result, PREG_SET_ORDER);
+     */
     var target = source;
     if (!found) {
         target = target.replace('\\\n', ' ');
@@ -302,6 +324,9 @@ var wiki = (function() {
       target = target.replace('\\\n', ' ');
       if (before != target) found.push('wrap');
     }
+    /* special case */
+    //target.replace('\n{2,}', '\n<p />\n');
+
     for (var key in basic_patterns) {
         if (key == 0) continue;
         var triple = basic_patterns[key];
@@ -315,6 +340,39 @@ var wiki = (function() {
         }
     }
     target = listpre(target, found);
+    /* TODO
+     * here is where citations should be ingested, referenced, etc...
+     * Use &book{index} as a reference.
+     * Use &book{index field = {content}, field = {content} } as source.
+     * Use &references; late in the markdown to express citations.
+     * Implement specialty entity parsing for &references;
+     * Use abbrevs by creating specialty entities:
+     *   
+     */
+    /* TODO
+     * Implement this entity translation in javascript.
+     *   Example: <!ENTITY jdl  "Jonathan D. Lettvin">
+     *   Then: &jdl; is translated to Jonathan D. Lettvin.
+     * This function should probably precede all others.
+     * original in Desktop/server/nvie/index.php
+
+    private function getentities($text) {
+        $pattern = '|<!ENTITY\s*(\S*)\s*"([^"]*)">|sU';
+        preg_match_all($pattern, $text, $result, PREG_SET_ORDER);
+        return $result;
+    }
+
+    function entify($text) {
+        return
+            preg_replace(
+                '|>|', '&gt',
+                preg_replace(
+                    '|<|', '&lt;',
+                    preg_replace(
+                        '|&|', '&amp;',
+                        $text)));
+    }
+     */
     return target;
   }
 

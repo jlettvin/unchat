@@ -15,7 +15,7 @@ function markupIf(condition, text) {
 }
 var data = {markupN:true,markupS:true};
 data.userN = 'North';
-var bodyN = splitwindow.hereDoc(function() {/*
+var bodyN = splitwindow.HERE(function() {/*
 == Shakespeare sonnet CXVI: ==
  Let me not to the marriage of true minds
  Admit impediments. Love is not love
@@ -37,7 +37,7 @@ var bodyN = splitwindow.hereDoc(function() {/*
 @- wiki box fails.
 */});
 data.userS = 'South';
-var bodyS = splitwindow.hereDoc(function() {/*
+var bodyS = splitwindow.HERE(function() {/*
 == Shakespeare sonnet CX: ==
  Alas! 'tis true, I have gone here and there,
  And made my self a motley to the view,
@@ -101,8 +101,35 @@ break for next paragraph.^^^
 
 Break^^a^^line^^into^^words.^^
 
+&book{CajalHistology,
+  author        = {Santiago Ram\'{o}n y Cajal},
+  title         = {Histology of the Nervous System of Man and Vertebrates},
+  publisher     = {Oxford},
+  pages         = {145},
+  isbn          = {ISBN 0-19-507401-7},
+  year          = {1995},
+  note          = {English translation by Swanson and Swanson, original completed in 1904}
+}
+&article{LettvinSeenMovement,
+    author        = {Jerome Y. Lettvin et. al.},
+    title         = {How seen movement appears in the frog's optic nerve},
+    journal       = {Federation Proceedings},
+    year          = {1959},
+    month         = {march},
+    volume        = {18},
+    number        = {1},
+    pages         = {393 and 354}
+}
+&book{WaxmanAxons,
+    editor        = {Stephen G. Waxman},
+    title         = {Physiology and Pathobiology of Axons},
+    isbn          = {ISBN 0-89004-215-2}
+}
+
 |box up
 |some text
+&references;
+
 */});
 function toggle() {
   console.log('toggle: ' + data.markupN + '/' + data.markupS)
@@ -119,7 +146,7 @@ var keyState = {
       else if (name ==   "UP") { data.markupN = !data.markupN; toggle() }
     }
     else if (name == "F1") {
-      alert(splitwindow.hereDoc(function() {/*
+      alert(splitwindow.HERE(function() {/*
 Use:
 <Shift><Up>   to toggle North wiki/view
 <Shift><Down> to toggle South wiki/view
