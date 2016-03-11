@@ -1,43 +1,42 @@
 splitwindow = {
-
+ //____________________________________________________________________________
  // Special function to enable multi-line text constants to be defined.
  // https://gist.github.com/tai2/c63f973dd7f8b3607c0e
  HERE:function(f) { return f.toString().split('\n').slice(1,-1).join('\n'); },
 
+ //____________________________________________________________________________
  // create default empty data dictionary.
  data:{userN:'', bodyN:'', userS:'', bodyS:''},
 
+ //____________________________________________________________________________
  // enable client to populate data dictionary.
  init:function(data) { this.data = data; },
 
- xy: {x:0,y:0},
- getScroll:function() {
-  // http://webcodingeasy.com/Javascript/Get-scroll-position-of-webpage--crossbrowser
-  var from = false;
-  if (typeof( window.pageYOffset ) == 'number')
-  { //Netscape compliant
-    this.xy = {x:window.pageXOffset, y: window.pageYOffset};
-  } else if (document.body &&
-    (document.body.scrollLeft || document.body.scrollTop))
-  { //DOM compliant
-    from = document.body;
-  } else if (document.documentElement && 
-    (document.documentElement.scrollLeft || document.documentElement.scrollTop))
-  { //IE6 standards compliant mode
-    from = document.documentElement;
-  }
-  if (from) this.xy = {x:from.scrollLeft, y:from.scrollTop};
-  //console.log(this.xy);
+ //____________________________________________________________________________
+ getScroll:function(pane) {
+   var elmnt = document.getElementById(pane);
+   sessionStorage.setItem('top.'  + pane, elmnt.scrollTop );
+   sessionStorage.setItem('left.' + pane, elmnt.scrollLeft);
  },
 
+ //____________________________________________________________________________
+ setScroll:function(pane) {
+   var elmnt = document.getElementById(pane);
+   elmnt.scrollTop  = parseInt(sessionStorage.getItem('top.'  + pane));
+   elmnt.scrollLeft = parseInt(sessionStorage.getItem('left.' + pane));
+ },
+
+ //____________________________________________________________________________
  // define function to execute when load/resize operations are called.
  resize:function() {
   // declare local variables.
   var style, userN, userS, paneN, paneS;
   var w  = window.innerWidth, h = window.innerHeight;
-  //this.getScroll();
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
+
+  splitwindow.getScroll('paneN');
+  splitwindow.getScroll('paneS');
 
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';
@@ -73,10 +72,12 @@ splitwindow = {
 
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
-  window.onresize = splitwindow.resize;
-  //window.scrollTo(this.xy.x, this.xy.y);
- },
+  window.onresize = this.resize;
 
+  splitwindow.setScroll('paneN');
+  splitwindow.setScroll('paneS');
+ },
+ //____________________________________________________________________________
 };
 // Make markdown function visible.
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
