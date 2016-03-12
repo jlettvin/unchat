@@ -9,11 +9,7 @@
   <script src="wiki.js"></script>
   <script src="keymap.js"></script>
   <script type="text/javascript">
-function markupIf(condition, text) {
-  if (condition) return window.markdown(text); //, window.markdownPatterns);
-  else return '<pre>' + text + '</pre>';
-}
-var data = {markupN:true,markupS:true};
+var data = {renderN:true,renderS:true};
 data.userN = 'North';
 var bodyN = splitwindow.HERE(function() {/*
 == Shakespeare sonnet CXVI: ==
@@ -131,19 +127,34 @@ Break^^a^^line^^into^^words.^^
 &references;
 
 */});
-function toggle() {
-  console.log('toggle: ' + data.markupN + '/' + data.markupS)
-  data.bodyN = markupIf(data.markupN, bodyN);
-  data.bodyS = markupIf(data.markupS, bodyS);
+//_____________________________________________________________________________
+function renderIf(condition, text) {
+  if (condition) return window.markdown(text); //, window.markdownPatterns);
+  else return '<pre>' + text + '</pre>';
 }
+//_____________________________________________________________________________
+function render() {
+  console.log('render: ' + data.renderN + '/' + data.renderS)
+  data.bodyN = renderIf(data.renderN, bodyN);
+  data.bodyS = renderIf(data.renderS, bodyS);
+}
+//_____________________________________________________________________________
 var keyState = {
   Shift:false,
   Down: function(e) {
     var name = keyMap[e.keyCode];
     if (name == "SHIFT") keyState.Shift =  true;
     else if (keyState.Shift == true) {
-      if      (name == "DOWN") { data.markupS = !data.markupS; toggle() }
-      else if (name ==   "UP") { data.markupN = !data.markupN; toggle() }
+      if      (name == "DOWN") {
+        data.renderS = !data.renderS;
+        render();
+        splitwindow.resize();
+      }
+      else if (name ==   "UP") {
+        data.renderN = !data.renderN;
+        render();
+        splitwindow.resize();
+      }
     }
     else if (name == "F1") {
       alert(splitwindow.HERE(function() {/*
@@ -152,15 +163,16 @@ Use:
 <Shift><Down> to toggle South wiki/view
 */}));
     }
-    splitwindow.resize();
   },
   Up: function(e) {
     var name = keyMap[e.keyCode];
     if (name == "SHIFT") keyState.Shift =  false;
   },
 };
+//_____________________________________________________________________________
 splitwindow.init(data);
-toggle();
+render();
+//_____________________________________________________________________________
   </script>
 </head>
 

@@ -13,17 +13,26 @@ splitwindow = {
  init:function(data) { this.data = data; },
 
  //____________________________________________________________________________
- getScroll:function(pane) {
-   var elmnt = document.getElementById(pane);
-   sessionStorage.setItem('top.'  + pane, elmnt.scrollTop );
-   sessionStorage.setItem('left.' + pane, elmnt.scrollLeft);
+ getScroll:function(render, pane) {
+   var item = document.getElementById(pane);
+   //var named = 'both';
+   var named = (render ? 'render' : 'markup') + pane + '.';
+   var x = item.scrollLeft, y = item.scrollTop;
+   console.log('get: ' + named + '(' + x + ',' + y + ')');
+   sessionStorage.setItem('Y' + named, y);
+   sessionStorage.setItem('X' + named, x);
  },
 
  //____________________________________________________________________________
- setScroll:function(pane) {
-   var elmnt = document.getElementById(pane);
-   elmnt.scrollTop  = parseInt(sessionStorage.getItem('top.'  + pane));
-   elmnt.scrollLeft = parseInt(sessionStorage.getItem('left.' + pane));
+ setScroll:function(render, pane) {
+   var item = document.getElementById(pane);
+   //var named = 'both';
+   var named = (render ? 'render' : 'markup') + pane + '.';
+   var y = parseInt(sessionStorage.getItem('Y' + named));
+   var x = parseInt(sessionStorage.getItem('X' + named));
+   item.scrollTop  = y;
+   item.scrollLeft = x;
+   console.log('set: ' + named + '(' + x + ',' + y + ')');
  },
 
  //____________________________________________________________________________
@@ -35,8 +44,8 @@ splitwindow = {
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
 
-  splitwindow.getScroll('paneN');
-  splitwindow.getScroll('paneS');
+  splitwindow.getScroll(splitwindow.data.renderN, 'paneN');
+  splitwindow.getScroll(splitwindow.data.renderS, 'paneS');
 
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';
@@ -74,8 +83,8 @@ splitwindow = {
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
   window.onresize = this.resize;
 
-  splitwindow.setScroll('paneN');
-  splitwindow.setScroll('paneS');
+  splitwindow.setScroll(splitwindow.data.renderN, 'paneN');
+  splitwindow.setScroll(splitwindow.data.renderS, 'paneS');
  },
  //____________________________________________________________________________
 };
