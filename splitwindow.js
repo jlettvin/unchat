@@ -6,16 +6,14 @@ splitwindow = {
 
  //____________________________________________________________________________
  // create default empty data dictionary.
- data:{userN:'', bodyN:'', userS:'', bodyS:''},
-
- //____________________________________________________________________________
- // enable client to populate data dictionary.
- init:function(data) { this.data = data; },
+ pane:{
+   North:{id:'North', render:true, },
+   South:{id:'South', render:true, }
+ },
 
  //____________________________________________________________________________
  getScroll:function(render, pane) {
    var item = document.getElementById(pane);
-   //var named = 'both';
    var named = (render ? 'render' : 'markup') + pane + '.';
    var x = item.scrollLeft, y = item.scrollTop;
    console.log('get: ' + named + '(' + x + ',' + y + ')');
@@ -26,7 +24,6 @@ splitwindow = {
  //____________________________________________________________________________
  setScroll:function(render, pane) {
    var item = document.getElementById(pane);
-   //var named = 'both';
    var named = (render ? 'render' : 'markup') + pane + '.';
    var y = parseInt(sessionStorage.getItem('Y' + named));
    var x = parseInt(sessionStorage.getItem('X' + named));
@@ -43,9 +40,7 @@ splitwindow = {
   var w  = window.innerWidth, h = window.innerHeight;
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
-
-  //splitwindow.getScroll(splitwindow.data.renderN, 'paneN');
-  //splitwindow.getScroll(splitwindow.data.renderS, 'paneS');
+  var North = this.pane.North, South = this.pane.South;
 
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';
@@ -74,20 +69,23 @@ splitwindow = {
   style  = '<style type="text/css">'+ style +'</style>';
 
   // prepare divs for North and South pane components.
-  userN  = '<header  id="userN">' + this.data.userN + '</header>';
-  userS  = '<header  id="userS">' + this.data.userS + '</header>';
-  paneN += '<article id="paneN">' + userN + this.data.bodyN + '</article>';
-  paneS += '<article id="paneS">' + userS + this.data.bodyS + '</article>';
+  var idN = (North.render ? 'render' : 'markup') + ' ' + North.id;
+  var idS = (South.render ? 'render' : 'markup') + ' ' + South.id;
+  userN  = '<header  id="userN">' + idN + '</header>';
+  userS  = '<header  id="userS">' + idS + '</header>';
+  paneN += '<article id="paneN">' + userN + North.body + '</article>';
+  paneS += '<article id="paneS">' + userS + South.body + '</article>';
 
   // write content to fill body tag.
   document.getElementById("splitwindow").innerHTML = style + paneN + paneS;
   window.onresize = this.resize;
 
-  splitwindow.setScroll(splitwindow.data.renderN, 'paneN');
-  splitwindow.setScroll(splitwindow.data.renderS, 'paneS');
+  splitwindow.setScroll(North.render, 'paneN');
+  splitwindow.setScroll(South.render, 'paneS');
  },
  //____________________________________________________________________________
 };
+
 // Make markdown function visible.
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
   module.exports = splitwindow;

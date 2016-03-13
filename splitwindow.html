@@ -9,8 +9,7 @@
   <script src="wiki.js"></script>
   <script src="keymap.js"></script>
   <script type="text/javascript">
-var data = {renderN:true,renderS:true};
-data.userN = 'North';
+
 var bodyN = splitwindow.HERE(function() {/*
 == Shakespeare sonnet CXVI: ==
  Let me not to the marriage of true minds
@@ -32,7 +31,9 @@ var bodyN = splitwindow.HERE(function() {/*
 @- wiki userS final comment closing is visible.
 @- wiki box fails.
 */});
-data.userS = 'South';
+splitwindow.pane.North.id = 'remote'
+splitwindow.pane.North.markup = bodyN;
+
 var bodyS = splitwindow.HERE(function() {/*
 == Shakespeare sonnet CX: ==
  Alas! 'tis true, I have gone here and there,
@@ -127,17 +128,24 @@ Break^^a^^line^^into^^words.^^
 &references;
 
 */});
+splitwindow.pane.South.id = 'local'
+splitwindow.pane.South.markup = bodyS;
+
 //_____________________________________________________________________________
 function renderIf(condition, text) {
-  if (condition) return window.markdown(text); //, window.markdownPatterns);
+  if (condition) return window.markdown(text);
   else return '<pre>' + text + '</pre>';
 }
+
 //_____________________________________________________________________________
 function render() {
-  console.log('render: ' + data.renderN + '/' + data.renderS)
-  data.bodyN = renderIf(data.renderN, bodyN);
-  data.bodyS = renderIf(data.renderS, bodyS);
+  var renderN = splitwindow.pane.North.render;
+  var renderS = splitwindow.pane.South.render;
+  console.log('render: ' + renderN + '/' + renderS)
+  splitwindow.pane.North.body = renderIf(renderN, bodyN);
+  splitwindow.pane.South.body = renderIf(renderS, bodyS);
 }
+
 //_____________________________________________________________________________
 var keyState = {
   Shift:false,
@@ -146,14 +154,16 @@ var keyState = {
     if (name == "SHIFT") keyState.Shift =  true;
     else if (keyState.Shift == true) {
       if      (name == "DOWN") {
-        splitwindow.getScroll(data.renderS, 'paneS');
-        data.renderS = !data.renderS;
+        var renderp = splitwindow.pane.South.render;
+        splitwindow.getScroll(renderp, 'paneS');
+        splitwindow.pane.South.render = !renderp;
         render();
         splitwindow.resize();
       }
       else if (name ==   "UP") {
-        splitwindow.getScroll(data.renderN, 'paneN');
-        data.renderN = !data.renderN;
+        var renderp = splitwindow.pane.North.render;
+        splitwindow.getScroll(renderp, 'paneN');
+        splitwindow.pane.North.render = !renderp;
         render();
         splitwindow.resize();
       }
@@ -171,9 +181,11 @@ Use:
     if (name == "SHIFT") keyState.Shift =  false;
   },
 };
+
 //_____________________________________________________________________________
-splitwindow.init(data);
+//splitwindow.init(data);
 render();
+
 //_____________________________________________________________________________
   </script>
 </head>
