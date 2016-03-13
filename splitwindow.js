@@ -44,8 +44,8 @@ splitwindow = {
   var h0 = '0px', h1 = h/2 + 'px', h2 = h + 'px';
   var w0 = '0px', w1 = w/2 + 'px', w2 = w + 'px';
 
-  splitwindow.getScroll(splitwindow.data.renderN, 'paneN');
-  splitwindow.getScroll(splitwindow.data.renderS, 'paneS');
+  //splitwindow.getScroll(splitwindow.data.renderN, 'paneN');
+  //splitwindow.getScroll(splitwindow.data.renderS, 'paneS');
 
   // prepare generic styles used by all.
   style  = 'body { font-family:"Times New Roman",serif; font-size:10px; }';

@@ -146,11 +146,13 @@ var keyState = {
     if (name == "SHIFT") keyState.Shift =  true;
     else if (keyState.Shift == true) {
       if      (name == "DOWN") {
+        splitwindow.getScroll(data.renderS, 'paneS');
         data.renderS = !data.renderS;
         render();
         splitwindow.resize();
       }
       else if (name ==   "UP") {
+        splitwindow.getScroll(data.renderN, 'paneN');
         data.renderN = !data.renderN;
         render();
         splitwindow.resize();
